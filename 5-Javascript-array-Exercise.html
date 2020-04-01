@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <script>
+  function sum()
+  {
+var myColor = ["Red", "Green", "White", "Black"];
+// var strmyColor = myColor.toString();
+// var arr = myColor.join("+");
+var arr = "";
+var arrMycolor = [];
+var arr2= myColor;
+// for(x=0; x<myColor.length; x++)
+// {
+//   if(x==myColor.length-1)
+//   {
+//     arr = arr+myColor[x]
+//   }
+//   else{
+// arr = arr+myColor[x]+"+";
+// }
+// }
+// var i=0;
+// for(x=0; x<myColor.length; x++)
+// {
+//   if(myColor[x]!="White")
+//   {
+//     arr = arr+myColor[x];
+//     arrMycolor[i] = myColor[x];
+//     i=i+1;
+//   }
+
+// }
+var i=0;
+for(x=0; x<myColor.length; x++)
+{
+  if(x!=1)
+  {
+    arr = arr+myColor[x];
+    arrMycolor[i] = myColor[x];
+    i=i+1;
+  }
+
+}
+    alert(arrMycolor.join());
+
+
+  }
+ </script>
+    <span id="spnRes"></span>
+    <input type="button" value="Sum" onclick="sum();">
+  
+</body>
+</html>

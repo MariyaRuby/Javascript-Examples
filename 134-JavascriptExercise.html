@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <script>
+  function sum()
+  {
+var stra = "mariyam" ;
+var arr = stra.split("");
+var alpha = "abcdefghijklmnopqrstuvwxyz";
+var alphaarr = alpha.split("");
+var res = stra ;
+
+for(i=0; i<alphaarr.length; i++)
+{
+  for(j=0; j<arr.length; j++)
+  {
+  if(alphaarr[i]==arr[j])
+  {
+alphaindex=25-i;
+
+alternate=alphaarr[alphaindex];
+res=res.replace(arr[j],alternate);
+}
+}
+}
+alert(res);
+  }
+ </script>
+    <span id="spnRes"></span>
+    <input type="button" value="Sum" onclick="sum();">
+  
+</body>
+</html>

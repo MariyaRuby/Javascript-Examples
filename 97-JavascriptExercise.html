@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <script>
+  function sum()
+  {
+  
+strx = "mariya" ;
+var r = strx.split("");
+var s = r.reverse("");
+var res = "";
+alert(strx.substr(0,strx.length-1));
+ alert(s.join(""));
+ document.getElementById("spnRes").innerHTML=(strx.substr(0,strx.length-1)+s.join(""));
+ 
+for(i=1; i<=arr.length; i++)
+
+{ if(i % 2 !=0){
+odd.push(arr[i-1]);
+}
+else{
+    even.push(arr[i-1]);
+}
+
+}
+var oddres=0;
+for(x=0; x<odd.length; x++)
+{
+oddres=oddres+odd[x];
+}
+   alert(oddres);
+   var evenres=0;
+for(x=0; x<even.length; x++)
+{
+    evenres=evenres+even[x];
+}
+   alert(evenres);
+}
+    </script>
+    <span id="spnRes"></span>
+    <input type="button" value="Sum" onclick="sum();">
+  
+</body>
+</html>

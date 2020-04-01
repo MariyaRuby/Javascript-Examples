@@ -1,0 +1,27 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <script>
+  function sum()
+  {
+  var x = "mariya is a good girl";
+
+var arr = x.split(" ");
+alert(arr.length);   
+for(i=0; i<arr.length; i++)
+{
+    // alert(arr[i].charAt(0).toUpperCase()+arr[i].substr(1));
+    arr[i]=arr[i].charAt(0).toUpperCase()+arr[i].substr(1);
+    
+}
+alert(arr.join(" "));
+  }
+    </script>
+    <input type="button" value="Sum" onclick="sum();">
+
+</body>
+</html>

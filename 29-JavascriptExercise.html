@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <script>
+  function sum()
+  {
+  var a = parseInt(document.getElementById("txtNumber1").value);
+  var b = parseInt(document.getElementById("txtNumber2").value);
+  var c = parseInt(document.getElementById("txtNumber2").value);
+  
+  if ((a >= 50 && a <= 90) || (b >= 50 && b <= 90) || (c >= 50 && c <= 90))
+  { alert("true");  
+  }
+  else{
+    alert("false");  
+  }
+  } 
+
+    </script>
+    <input type="button" value="Sum" onclick="sum();">
+  <form style="text-align: right;">
+  1st Number:
+  <input type="text"  id="txtNumber1" value="" required>
+  <br>
+  <br>
+  2nd Number:
+  <input type="text"  id="txtNumber2" value="" required>
+  <br>
+  <br>
+  3rd Number:
+  <input type="text"  id="txtNumber3" value="" required>
+  <br>
+  <br>
+  <span id="result">The result is : </span>
+  </form>
+</body>
+</html>

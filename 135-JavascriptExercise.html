@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <script>
+  function sum()
+  {
+  
+var stra = "Mariyam" ;
+var stra = stra.toLowerCase();
+var arr = stra.split("");
+var res = stra ;
+for(i=0; i<arr.length; i++)
+{
+ index1=stra.indexOf(arr[i]);
+ index2=stra.lastIndexOf(arr[i]);
+ alert(index1+" "+index2);
+ if(index1 != index2)
+ {
+   res=res.replace(arr[i],"");
+ }
+}
+alert(res);
+  }
+
+
+    </script>
+    <span id="spnRes"></span>
+    <input type="button" value="Sum" onclick="sum();">
+  
+</body>
+</html>

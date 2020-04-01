@@ -1,0 +1,23 @@
+<html>    
+   <body>              
+      <script>  
+         function longestWord(inputStr, inputstr2)
+          {        
+           var spltWrd = inputStr.split(" ");
+
+           var longestWord = spltWrd.sort(function(a, b) { 
+    return b.length - a.length;
+  });
+  alert(longestWord[0]);
+  alert(inputstr2);
+         }     
+
+         //var orgStr = "We are a Tag Team";
+         //longestWord(orgStr);
+         
+         //longestWord("We are here for a mission");
+      </script>
+      
+      <button onclick="longestWord('We are here for a mission','hi')"></button>
+   </body>
+</html>

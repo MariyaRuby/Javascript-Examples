@@ -1,0 +1,34 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type="text/javascript"> 
+      var arr = ["red","blue","violet","pink","green","orange","yellow","black","purple"];
+        
+        // Function to check prime number 
+        var x = 0 ;
+        function s()
+         {  
+           document.body.style.backgroundColor=arr[x];
+           x=x+1;
+           if(x == arr.length)
+           {
+            x = 0;
+           }
+        }
+        function p()
+         { 
+            var colrMe = Math.floor(Math.random() * arr.length);
+           document.body.style.backgroundColor=arr[colrMe];
+        }
+    </script> 
+</head> 
+  
+<body> 
+         <input type="button" value="SwitchColor" onClick="s()">
+            <input type="button" value="ClickMe" onClick="p()"> 
+</body>
+</html>

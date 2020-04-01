@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+		
+<meta charset="UTF-8">
+<title>mariyarubi website</title>
+<script lang="javascript">   
+var gameLimit=4;
+var original;
+var gameCount = 0;
+var score=0;
+var stopTimer;
+var count = 3;
+
+function rndmLetters(len,rakesh,mariya) 
+{
+    document.getElementById("spnScore").style.display="none";
+    document.body.style.backgroundImage="";
+    document.body.style.backgroundColor="";
+
+   var result           = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+   var charactersLength = characters.length;
+   
+   for ( var i = 0; i < len; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   document.getElementById("spnRndmDisplay").innerHTML= result;
+   original=result;
+   document.getElementById("txtAnswer").focus();
+   document.getElementById('spnRndmDisplay').style.display='inline-block';
+setTimeout("hideWords()", 1000);
+gameCount=gameCount+1;
+
+
+   return result;
+}
+
+function hideWords()
+{
+document.getElementById('spnRndmDisplay').style.display='none';
+stopTimer = setInterval("countDown()",1000);
+}
+
+function countDown()
+{
+    document.getElementById('spnTimer').style.display='block';
+    document.getElementById('spnTimer').innerHTML=count;
+
+    if(count==0)
+    {
+        count = 3
+        document.getElementById('spnTimer').style.display='none';
+        clearInterval(stopTimer);
+        document.getElementById('txtAnswer').disabled=true;
+        document.getElementById('btnGetWords').disabled=true;
+
+        validateAnswer();
+    }
+    else
+    {
+        count = count-1;
+    }
+}
+
+function validateAnswer()
+{
+    if(original.toLowerCase()==document.getElementById('txtAnswer').value.toLowerCase())
+    {
+        document.body.style.backgroundColor="Green";
+        score=score+1;
+    }
+    else
+    {
+        document.body.style.backgroundColor="Red";
+    }
+
+document.getElementById('txtAnswer').disabled=false;
+document.getElementById('btnGetWords').disabled=false;
+document.getElementById('txtAnswer').value="";
+//score is 910
+alert("your score is " + score + "/" + gameLimit);
+
+    if(gameCount==gameLimit)
+    { document.getElementById("spnScore").style.display="inline-block";
+        document.getElementById("spnScore").innerHTML="The final Score is " + score + "/" + gameLimit;
+    // alert("The final Score is " + score + "/" + gameLimit);
+    
+        if(score<Math.round(gameLimit/2))
+        {
+            document.body.style.backgroundImage="url('BadScore.png')";
+        }
+        else
+        {
+            document.body.style.backgroundImage="url('GoodScore.webp')";
+        }
+        score=0;
+        gameCount=0;
+    }
+}
+
+// function bodyKeyDown()
+// {
+//     if(event.keyCode === 13)
+//     {
+//       document.getElementById("btnGetWords").click();
+//     }
+// }
+ </script>
+</head>
+<!-- onkeydown="bodyKeyDown()" -->
+<body>
+
+    <div id="divContainer" style="margin: auto; width: 30% ; padding:15px 15px 15px 15px; border: 2px solid black;"> 
+        <span id="spnRndmDisplay" style="display: none; background-color: darkgray; padding: 20px 20px 20px 20px; border: 3px mediumblue solid; color:maroon; font-size:xx-large;"> </span>
+ <br>
+        <input type="text" id="txtAnswer"><span id="spnTimer" style="display:none"> </span>
+        <input type="button" id="btnGetWords" value="Go" onclick="rndmLetters(5,'rakkkk');">
+        <br>
+        <span id="spnScore" style="font-size: xx-large; color: darkblue; padding: 20px 20px 20px 20px; border: 5px crimson dashed;display: none;">SCORE</span>
+    </div>
+
+</body>
+</html>

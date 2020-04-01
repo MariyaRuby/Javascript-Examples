@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <script>
+  function sum()
+  {
+  
+stra = "Mariya is a girl" ;
+
+if(stra.charCodeAt(0)>64 && stra.charCodeAt(0)<91)
+// if(stra.charAt(0) == stra.charAt(0).toUpperCase())
+{
+ alert("true");
+}
+else
+{
+    alert("false");
+}
+if(stra.charAt(stra.length-1) == ".")
+{
+ alert("true");
+}
+else
+{
+    alert("false");
+}
+  }
+    </script>
+    <span id="spnRes"></span>
+    <input type="button" value="Sum" onclick="sum();">
+  
+</body>
+</html>
