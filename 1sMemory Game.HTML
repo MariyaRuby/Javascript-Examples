@@ -11,25 +11,31 @@ var gameCount = 0;
 var score=0;
 var stopTimer;
 var count = 3;
-// to get random Letters//
+// to get random Letters//--maria
 function rndmLetters(len,rakesh,mariya) 
 {
     document.getElementById("spnScore").style.display="none";
+    // To restart the game, make the bg.image and bg.color null//--maria
     document.body.style.backgroundImage="";
     document.body.style.backgroundColor="";
 
    var result           = '';
    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
    var charactersLength = characters.length;
-   
+   // To get the random letters from the variable characters//--maria
    for ( var i = 0; i < len; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
    }
+   // To validate the txtvalue and result//--maria
    document.getElementById("spnRndmDisplay").innerHTML= result;
    original=result;
+   // To get the type tool inside the text box without using mouse//--maria
    document.getElementById("txtAnswer").focus();
+   // To get the text box fitted//--maria
    document.getElementById('spnRndmDisplay').style.display='inline-block';
+   // To hide the words in a second//--maria
 setTimeout("hideWords()", 1000);
+// To move on to the next word//--maria
 gameCount=gameCount+1;
 
 
@@ -38,12 +44,14 @@ gameCount=gameCount+1;
 
 function hideWords()
 {
+    // To remove the text after a second//--maria
 document.getElementById('spnRndmDisplay').style.display='none';
 stopTimer = setInterval("countDown()",1000);
 }
 
 function countDown()
 {
+    // To start the countdown from 3 for the user to answer//--maria
     document.getElementById('spnTimer').style.display='block';
     document.getElementById('spnTimer').innerHTML=count;
 
@@ -65,6 +73,7 @@ function countDown()
 
 function validateAnswer()
 {
+    // To validate the user's answer//--maria
     if(original.toLowerCase()==document.getElementById('txtAnswer').value.toLowerCase())
     {
         document.body.style.backgroundColor="Green";
@@ -78,14 +87,14 @@ function validateAnswer()
 document.getElementById('txtAnswer').disabled=false;
 document.getElementById('btnGetWords').disabled=false;
 document.getElementById('txtAnswer').value="";
-//score is 910
+//To get the score in an alert box//--maria
 alert("your score is " + score + "/" + gameLimit);
 
     if(gameCount==gameLimit)
     { document.getElementById("spnScore").style.display="inline-block";
         document.getElementById("spnScore").innerHTML="The final Score is " + score + "/" + gameLimit;
     // alert("The final Score is " + score + "/" + gameLimit);
-    
+    // To validate the score and for appreciation//--maria
         if(score<Math.round(gameLimit/2))
         {
             document.body.style.backgroundImage="url('BadScore.png')";
