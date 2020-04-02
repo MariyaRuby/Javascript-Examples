@@ -5,20 +5,16 @@
 <meta charset="UTF-8">
 <title>mariyarubi website</title>
 <script lang="javascript">   
-var gameLimit=4;
+var gameLimit=10;
 var original;
 var gameCount = 0;
 var score=0;
-var stopTimer;
+var stopTime,stopTimeOut;
 var count = 3;
+
 // to get random Letters//--maria
 function rndmLetters(len,rakesh,mariya) 
 {
-    document.getElementById("spnScore").style.display="none";
-    // To restart the game, make the bg.image and bg.color null//--maria
-    document.body.style.backgroundImage="";
-    document.body.style.backgroundColor="";
-
    var result           = '';
    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
    var charactersLength = characters.length;
@@ -31,17 +27,13 @@ function rndmLetters(len,rakesh,mariya)
    original=result;
    // To get the type tool inside the text box without using mouse//--maria
    document.getElementById("txtAnswer").focus();
-   // To get the text box fitted//--maria
+   // To get the text box fitted and to display the text//--maria
    document.getElementById('spnRndmDisplay').style.display='inline-block';
-   // To hide the words in a second//--maria
-setTimeout("hideWords()", 1000);
-// To move on to the next word//--maria
+   // To move on to the next word//--maria
 gameCount=gameCount+1;
-
-
-   return result;
+   // To hide the words in a second//--maria
+   stopTimeOut=setTimeout("hideWords()", 1000);
 }
-
 function hideWords()
 {
     // To remove the text after a second//--maria
@@ -62,15 +54,13 @@ function countDown()
         clearInterval(stopTimer);
         document.getElementById('txtAnswer').disabled=true;
         document.getElementById('btnGetWords').disabled=true;
-
-        validateAnswer();
+             validateAnswer();
     }
     else
     {
         count = count-1;
     }
 }
-
 function validateAnswer()
 {
     // To validate the user's answer//--maria
@@ -83,13 +73,11 @@ function validateAnswer()
     {
         document.body.style.backgroundColor="Red";
     }
-
 document.getElementById('txtAnswer').disabled=false;
 document.getElementById('btnGetWords').disabled=false;
 document.getElementById('txtAnswer').value="";
 //To get the score in an alert box//--maria
 alert("your score is " + score + "/" + gameLimit);
-
     if(gameCount==gameLimit)
     { document.getElementById("spnScore").style.display="inline-block";
         document.getElementById("spnScore").innerHTML="The final Score is " + score + "/" + gameLimit;
@@ -105,9 +93,27 @@ alert("your score is " + score + "/" + gameLimit);
         }
         score=0;
         gameCount=0;
+        // document.getElementById('txtAnswer').disabled=true;
+        // document.getElementById('btnGetWords').disabled=true;
+        // document.getElementById('txtAnswer').value="";  
     }
 }
-
+function resetAll()
+{   count=3;
+    clearInterval(stopTimer);
+    clearTimeout(stopTimeOut);
+    document.getElementById("spnScore").style.display="none";
+    document.getElementById("spnTimer").style.display="none";
+    // To restart the game, make the bg.image and bg.color null//--maria
+    document.body.style.backgroundImage="";
+    document.body.style.backgroundColor="";
+    document.getElementById("txtAnswer").value="";
+    gameCount=0;
+    score=0;
+    document.getElementById('txtAnswer').disabled=false;
+    document.getElementById('btnGetWords').disabled=false;
+    document.getElementById('txtAnswer').value="";
+}
 // function bodyKeyDown()
 // {
 //     if(event.keyCode === 13)
@@ -122,9 +128,10 @@ alert("your score is " + score + "/" + gameLimit);
 
     <div id="divContainer" style="margin: auto; width: 30% ; padding:15px 15px 15px 15px; border: 2px solid black;"> 
         <span id="spnRndmDisplay" style="display: none; background-color: darkgray; padding: 20px 20px 20px 20px; border: 3px mediumblue solid; color:maroon; font-size:xx-large;"> </span>
- <br>
-        <input type="text" id="txtAnswer"><span id="spnTimer" style="display:none"> </span>
+ <br>   <span id="spnTimer" style="display:none"> </span>
+        <input type="text" id="txtAnswer">
         <input type="button" id="btnGetWords" value="Go" onclick="rndmLetters(5,'rakkkk');">
+        <input type="button" id="btnReset" value="Reset" onclick="resetAll()">
         <br>
         <span id="spnScore" style="font-size: xx-large; color: darkblue; padding: 20px 20px 20px 20px; border: 5px crimson dashed;display: none;">SCORE</span>
     </div>
