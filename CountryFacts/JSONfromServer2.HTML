@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>		
+<meta charset="UTF-8">
+<title>mariyarubi website</title>
+<script lang="javascript"> 
+
+
+function getCapital(countryName)
+{alert(countryName);
+  var xhttp;
+  xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      myArr = JSON.parse(this.responseText);
+      document.getElementById("demo").innerHTML = myArr[0].capital + "<br>" + myArr[0].callingCodes + "<br>" + myArr[0].population ; 
+    }
+  };
+  xhttp.open("GET", "https://restcountries.eu/rest/v2/name/"+ countryName +"?fullText=true", true);
+  xhttp.send();
+
+
+  }
+ </script>
+</head>
+<body>
+    <div id="demo"></div>
+<button id="btnIndia" onclick="getCapital('india')">INDIA</button>
+<button id="btnAustralia" onclick="getCapital('australia')">AUSTRALIA</button>
+<script>
+  var myArr;
+var countrybtn;
+var arrCountry = ["india","australia","u.s.a","u.k"];
+for(i=0; i<arrCountry.length; i++)
+  {
+    countrybtn = document.createElement("input");
+    countrybtn.setAttribute("type","button");
+    countrybtn.setAttribute("id", "btnCountry");
+    countrybtn.setAttribute("value", "country");
+    countrybtn.setAttribute("onclick","getCapital('india')");
+// countrybtn.onclick = function()
+// {
+//   getCapital('india');
+// };
+document.getElementById("demo").appendChild(countrybtn);
+    // document.body.appendChild(countrybtn);
+    // alert("fffffffffff");
+  }
+</script>
+</body>
+</html>
