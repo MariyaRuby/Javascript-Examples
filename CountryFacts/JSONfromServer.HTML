@@ -2,36 +2,131 @@
 <html>
 <head>		
 <meta charset="UTF-8">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <title>mariyarubi website</title>
 <script lang="javascript"> 
 var myArr;
+var strCountryName;
 function getCapital(countryName)
-{alert(countryName);
+{
+  //  alert(countryName);
+  strCountryName=countryName;
+  
+}
+function getCountryData()
+{ 
   var xhttp;
   xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       myArr = JSON.parse(this.responseText);
-      document.getElementById("demo").innerHTML = myArr[0].capital + "<br>" + myArr[0].callingCodes + "<br>" + myArr[0].population ; 
-    }
+      document.getElementById("demo").innerHTML = "";
+      document.getElementById("imgCountryFlag").src="./images/" + strCountryName + ".svg";
+      document.getElementById("spnCountry").innerHTML = strCountryName;
+
+      if(document.getElementById("chkCapital").checked==true)
+      {
+      document.getElementById("demo").innerHTML = document.getElementById("demo").innerHTML + "<b> capital : </b>" + myArr[0].capital + "<br>";
+      }
+      if(document.getElementById("chkCallingCodes").checked==true)
+      {
+      document.getElementById("demo").innerHTML = document.getElementById("demo").innerHTML + "<b> callingCodes : </b>" + myArr[0].callingCodes + "<br>"; 
+      }
+      if(document.getElementById("chkPopulation").checked==true)
+      {
+      document.getElementById("demo").innerHTML = document.getElementById("demo").innerHTML + "<b> population : </b>" + myArr[0].population + "<br>"; 
+      }
+      if(document.getElementById("chkAlpha2Code").checked==true)
+      {
+      document.getElementById("demo").innerHTML = document.getElementById("demo").innerHTML + "<b> alpha2Code : </b>" + myArr[0].alpha2Code + "<br>"; 
+      }
+      if(document.getElementById("chkLatLng").checked==true)
+      {
+      document.getElementById("demo").innerHTML = document.getElementById("demo").innerHTML + "<b> latlng : </b>" + myArr[0].latlng + "<br>"; 
+      }
+}
   };
-  xhttp.open("GET", "https://restcountries.eu/rest/v2/name/"+ countryName +"?fullText=true", true);
+  xhttp.open("GET", "https://restcountries.eu/rest/v2/name/"+ strCountryName, true);
  xhttp.send();
 }
  </script>
 </head>
 <body>
-    <span id="demo"></span>
+    
+    <div id="divFlags"></div>
+
+    <div class="modal fade" id="myModal"> 
+    <div class="modal-dialog"> 
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Select your Options</h4>
+          <br>
+        </hr>
+          <div class="modal-body">
+            <label class="form-check-label" id="lblClickedOnes">
+              <input class="form-check-input" id="chkCapital" type="checkbox" value=""> capital<br>
+              <input class="form-check-input" id="chkCallingCodes" type="checkbox" value=""> callingCodes<br>
+              <input class="form-check-input" id="chkPopulation" type="checkbox" value=""> population<br>
+              <input class="form-check-input" id="chkAlpha2Code" type="checkbox" value=""> alpha2Code<br>
+              <input class="form-check-input" id="chkLatLng" type="checkbox" value=""> latlng<br>
+            </label>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#myCountry" onclick="getCountryData()">Select</button>
+            </div>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="myCountry"> 
+    <div class="modal-dialog"> 
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"></h4>
+          <br>
+        </hr>
+          <div class="modal-body">
+            <img src="" id="imgCountryFlag" style="width:100px; height:75px">
+            <span id="spnCountry" style="font-size: xx-large; text-transform: capitalize;"></span>
+            <hr>
+                <span id="demo" style="font-size: small;"></span>
+            <div class="modal-footer">
+             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </div>
    <script>
-     var countries = ["china","france","germany","italy","japan","netherland","poland","russia","spain","ukraine","usa"];
-   for (var i=0; i < 11; i++)
+     var countries = ["abkhazia","afghanistan","aland-islands","albania","algeria","american-samoa","andorra","angola","anguilla","antigua-and-barbuda","argentina","armenia","aruba","australia","austria",
+     "azerbaijan","azores-islands","bahamas","bahrain","balearic-islands","bangladesh","barbados","basque-country","belarus","belgium","belize","benin","bermuda","bhutan","bolivia","bonaire","bosnia-and-herzegovina","botswana","brazil","british-columbia","british-indian-ocean-territory","british-virgin-islands","brunei","bulgaria","burkina-faso"
+,"burundi","cambodia","cameroon","canada","canary-islands","cape-verde","cayman-islands","central-african-republic","ceuta","chad","chile","china","christmas-island","cocos-island","colombia","comoros"
+,"cook-islands","corsica","costa-rica","croatia","cuba","curacao","cyprus","czech-republic","democratic-republic-of-congo","denmark","djibouti","dominica","dominican-republic","east-timor","ecuador","egypt",
+"el-salvador","england","equatorial-guinea","eritrea","estonia","ethiopia","european-union","falkland-islands","faroe-islands","fiji","finland","france","french-polynesia","gabon","galapagos-islands","gambia"
+,"georgia","germany","ghana","gibraltar","greece","greenland","grenada","guam","guatemala","guernsey","guinea","guinea-bissau","guyana","haiti","hawaii","honduras","hong-kong","hungary","iceland","india",
+"indonesia","iran","iraq","ireland","isle-of-man","israel","italy","ivory-coast","jamaica","japan","jersey","jordan","kazakhstan","kenya","kiribati","kosovo","kwait","kyrgyzstan","laos","latvia","lebanon"
+,"lesotho","liberia","libya","liechtenstein","lithuania","luxembourg","macao","madagascar","madeira","malasya","malawi","maldives","mali","malta","marshall-island","martinique","mauritania","mauritius"
+,"melilla","mexico","micronesia","moldova","monaco","mongolia","montenegro","montserrat","morocco","mozambique","myanmar","nagorno-karabakh-republic","namibia","nauru","nepal","netherlands","new-zealand"
+,"nicaragua","niger","nigeria","niue","norfolk-island","northern-cyprus","northern-marianas-islands","north-korea","norway","oman","ossetia","otan","pakistan","palau","palestine","panama","papua-new-guinea"
+,"paraguay","peru","philippines","pitcairn-islands","portugal","puerto-rico","qatar","rapa-nui","republic-of-macedonia","republic-of-poland","republic-of-the-congo","romania","russia","rwanda","saba-island"
+,"sahrawi-arab-democratic-republic","saint-kitts-and-nevis","samoa","san-marino","sao-tome-and-prince","sardinia","saudi-arabia","scotland","senegal","serbia","seychelles","sicily","sierra-leone","singapore"
+,"sint-eustatius","sint-maarten","slovakia","slovenia","solomon-islands","somalia","somaliland","south-africa","south-korea","south-sudan","spain","sri-lanka","st-barts","st-lucia","st-vincent-and-the-grenadines"
+,"sudan","suriname","swaziland","sweden","switzerland","syria","taiwan","tajikistan","tanzania","thailand","tibet","togo","tokelau","tonga","transnistria","trinidad-and-tobago","tunisia","turkey","turkmenistan"
+,"turks-and-caicos","tuvalu","tuvalu-1","uganda","ukraine","united-arab-emirates","united-kingdom","united-nations","united-states","uruguay","uzbekistn","vanuatu","vatican-city","venezuela","vietnam","virgin-islands"
+,"wales","yemen","zambia","zimbabwe"];
+   for (var i=0; i < 264; i++)
         {
-          
           var func = 'getCapital("'+ countries[i] +'")';
-          // alert(func);
-          var btn = "<input type='image' src='./images/"+ countries[i] +".jpg' id='btn' value='Country name' onclick='"+ func + "'>";
-          document.getElementById("demo").innerHTML = document.getElementById("demo").innerHTML + btn;
+          var btn = "<input type='image' src='./images/"+ countries[i] +".svg' id='btn' value='Country name' onclick='"+ func + "' data-toggle='modal' data-target='#myModal' style='width:100px; height:75px'>";
+          document.getElementById("divFlags").innerHTML = document.getElementById("divFlags").innerHTML + btn;
         } 
+
+        
       </script> 
 <!-- <button id="btnIndia" onclick="getCapital('india')">INDIA</button>
 <button id="btnAustralia" onclick="getCapital('australia')">AUSTRALIA</button>
