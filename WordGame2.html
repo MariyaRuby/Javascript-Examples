@@ -1,0 +1,27 @@
+<html>
+<head>
+
+
+
+
+</head>
+<body>
+<script>
+let url = "https://random-word-api.herokuapp.com/word?number=10";
+let response = await fetch(url);
+let words = await response.text(); // read response body and parse as JSON
+alert(words);
+
+var xhttp;
+  xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      myArr = JSON.parse(this.responseText);
+      alert(myArr[0]);
+    }
+  };
+  xhttp.open("GET", "https://random-word-api.herokuapp.com/word?number=10", true);
+ xhttp.send();
+</script>
+</body>
+</html>

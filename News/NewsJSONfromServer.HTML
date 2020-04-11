@@ -9,40 +9,72 @@
 <title>mariyarubi website</title>
 <script lang="javascript"> 
 var myArr;
-var strCountryName;
-function getNews(countryNews)
-{
-  //  alert(countryName);
-  strCountryNews=countryNews;
-  
-}
+
 function getCountryNews(sourceID)
-{ 
-  var xhttp;
-  xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
+{
+  //  document.write("https://newsapi.org/v1/articles?source=" + sourceID + "&sortBy=top&apiKey=4dbc17e007ab436fb66416009dfb59a8");
+  var xhttpNews;
+  xhttpNews = new XMLHttpRequest();
+  xhttpNews.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       myArr = JSON.parse(this.responseText);
       alert(myArr.articles[0].title);
+      document.getElementById("newsTitle").innerHTML="TOP-NEWS FROM : " + sourceID;
+      document.getElementById("demo").innerHTML = "";
       for(i=0; i<myArr.articles.length; i++)
       {
         document.getElementById("demo").innerHTML = document.getElementById("demo").innerHTML + myArr.articles[i].title + "<br>" +  myArr.articles[i].description + "<br><a href='"  +  myArr.articles[i].url + "'>Click ti view</a> <hr>";
       }      
 }
   };
-  xhttp.open("GET", "https://newsapi.org/v1/articles?source=" + sourceID + "+&sortBy=top&apiKey=4dbc17e007ab436fb66416009dfb59a8", true);
- xhttp.send();
+  xhttpNews.open("GET", "https://newsapi.org/v1/articles?source=" + sourceID + "&sortBy=top&apiKey=4dbc17e007ab436fb66416009dfb59a8", true);
+ xhttpNews.send();
 }
+
  </script>
 </head>
 <body>
-    <img src="" id="imgCountryFlag" style="width:100px; height:75px">
-            <span id="spnCountry"></span>
-                <span id="demo"></span>
-  https://newsapi.org/v2/sources?apiKey=4dbc17e007ab436fb66416009dfb59a8
+  <div id="divNews"></div>
+  <div class="modal fade" id="modalNews"> 
+    <div class="modal-dialog modal-lg"> 
+      <div class="modal-content modal-dialog-scrollable">
+        <div class="modal-header">
+          <br>
+        </hr>
+        <!-- <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#btnNews" onclick="getCountryNews('sourceID')">Select</button> -->
+          <div class="modal-body">
+            <h4 class="modal-title" id="newsTitle"> </h4>
+            <!-- <img src="" id="imgCountryFlag" style="width:100px; height:75px"> -->
+           <span id="demo" style="font-size: large; text-transform: capitalize;"></span>
+            <div class="modal-footer">
+             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> 
+            </div>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </div>
+                   
 
-     <button id="btnNews" onclick="getCountryNews()">getNews</button>
+     <!-- <button id="btnNews" onclick="getCountryNews(sourceID)">getNews</button> -->
  <script>
+
+  var xhttp;
+  xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      myArr = JSON.parse(this.responseText);
+      // alert(myArr.sources.length);
+      for(i=0; i<myArr.sources.length; i++)
+      { var func = 'getCountryNews("'+ myArr.sources[i].id +'")';
+          var btn = "<input type='button'  id='btnNews' value='"+ myArr.sources[i].id +"' onclick='"+ func + "' data-toggle='modal' data-target='#modalNews' style='width:100px; height:75px'>";
+          document.getElementById("divNews").innerHTML = document.getElementById("divNews").innerHTML + btn;    
+}
+ }
+  };
+  xhttp.open("GET", "https://newsapi.org/v2/sources?apiKey=4dbc17e007ab436fb66416009dfb59a8", true);
+ xhttp.send();
+
 
 </script>
 </body>

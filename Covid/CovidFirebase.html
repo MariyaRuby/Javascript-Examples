@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>		
+<meta charset="UTF-8">
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<title>mariyarubi website</title> -->
+<script src="Chart.min.js"></script>
+<script src="utils.js"></script>
+
+<style>
+canvas{
+-moz-user-select: none;
+-webkit-user-select: none;
+-ms-user-select: none;
+}
+</style>
+<script lang="javascript"> 
+
+var myArr;
+var strCountryName;
+var strTotalConfirmed, strNewConfirmed, strTotalDeaths, strNewDeaths, strTotalRecovered;
+var strIndTotalConfirmed, strIndNewConfirmed, strIndTotalDeaths, strIndNewDeaths, strIndTotalRecovered;
+function getCountryData(countries)
+{ 
+  var xhttp;
+  xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) 
+    {   
+var obj = JSON.parse(this.responseText);
+
+
+document.getElementById("demo").innerHTML ="NewConfirmed : " + obj.Global.NewConfirmed + "<br> TotalConfirmed : " + obj.Global.TotalConfirmed;
+strTotalConfirmed=obj.Global.TotalConfirmed;
+strNewConfirmed=obj.Global.NewConfirmed;
+strTotalRecovered=obj.Global.TotalRecovered;
+strTotalDeaths=obj.Global.TotalDeaths;
+strNewDeaths=obj.Global.NewDeaths;
+
+
+for(i=0; i<obj.Countries.length; i++)
+    {
+      if(obj.Countries[i].Country==="India")
+      {
+        document.getElementById("demo").innerHTML = document.getElementById("demo").innerHTML + "<br> NewConfirmed : " + obj.Countries[i].NewConfirmed + "<br> TotalConfirmed : " + obj.Countries[i].TotalConfirmed;
+          strIndTotalConfirmed=obj.Countries[i].TotalConfirmed;
+          strIndNewConfirmed=obj.Countries[i].NewConfirmed;
+          strIndTotalRecovered=obj.Countries[i].TotalRecovered;
+          strIndTotalDeaths=obj.Countries[i].TotalDeaths;
+          strIndNewDeaths=obj.Countries[i].NewDeaths;
+        
+         
+        return;
+      } 
+    }
+}
+};
+  xhttp.open("GET", "https://api.covid19api.com/summary", true);
+ xhttp.send();
+}
+ </script>
+</head>
+<body>
+  <div style="width:75%;">
+		<canvas id="canvas"></canvas>
+	</div>
+  <span id="demo"></span>
+  <button id="btnIndGlobe" onclick="getCountryData('India vs globe')">INDIA VS GLOBE</button>
+  <button id="btnFireBase" class="btn btn-success">Push data to Firebase</button> 
+  
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBcCBxAXGsT_qAr7nK0MaoDdOGQy2x_Wmo",
+    authDomain: "covidstatus-9dc49.firebaseapp.com",
+    databaseURL: "https://covidstatus-9dc49.firebaseio.com",
+    projectId: "covidstatus-9dc49",
+    storageBucket: "covidstatus-9dc49.appspot.com",
+    messagingSenderId: "476372830397",
+    appId: "1:476372830397:web:019519a1979f1fbba90fd4",
+    measurementId: "G-HPJSVLPZN4"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  //------------------
+  
+const database = firebase.database();
+const usersRef = database.ref('/Global');
+
+btnFireBase.addEventListener('click', e => {
+  e.preventDefault();
+  const autoId = usersRef.push().key;
+  
+  usersRef.child(autoId).set({
+    NewCases: strNewConfirmed,
+    TotalCases: strTotalConfirmed,
+    NewDeaths: strNewDeaths,
+    TotalRecovered: strTotalRecovered,
+    TotalDeaths: strTotalDeaths,
+    IndNewCases: strIndNewConfirmed,
+    IndTotalCases: strIndTotalConfirmed,
+    IndNewDeaths: strIndNewDeaths,
+    IndTotalRecovered: strIndTotalRecovered,
+    IndTotalDeaths: strIndTotalDeaths,
+    UpdatedOn: Date.now(),
+  })
+  .then(()=> { alert('User Added !'); })
+  .catch(error => { alert(error); });
+});
+var arrNewDeath = [];
+var arrTotalDeath = [];
+var arrNewConfirmed = [];
+var arrTotalConfirmed = [];
+var arrTotalRecovered = [];
+usersRef.on('child_added', snapshot => {
+  arrNewDeath.push(snapshot.val().NewDeaths);
+    config.data.datasets[0].data=arrNewDeath;
+    arrTotalDeath.push(snapshot.val().TotalDeaths);
+    config.data.datasets[1].data=arrTotalDeath;
+    arrTotalRecovered.push(snapshot.val().TotalRecovered);
+    config.data.datasets[2].data=arrTotalRecovered;
+    arrNewConfirmed.push(snapshot.val().NewCases);
+    config.data.datasets[3].data=arrNewConfirmed;
+    arrTotalConfirmed.push(snapshot.val().TotalCases);
+    config.data.datasets[4].data=arrTotalConfirmed;
+    
+    window.myLine.update();
+});
+</script>
+<script>
+  // function generateGraph()
+  // {
+  // //  alert(config.data.datasets[1].data[1]);
+  //   config.data.datasets[0].data=[111,222,333,444];
+  //   config.data.datasets[1].data=[1,885,974];
+  
+  //   window.myLine.update();
+  // }
+// var now = new Date();
+var EndDate = new Date();
+var arrXaxis=[""];
+// for (var d = new Date(); d.getDate() >= EndDate.getDate()-5; d.setDate(d.getDate() - 1)) 
+// {
+//     arrXaxis.push( d.toLocaleDateString());
+// }
+// config.data.labels = arrXaxis;
+// -------------
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var config = {
+    type: 'line',
+    data: {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'],
+      datasets: [{
+        label: 'New Deaths',
+        fill: false,
+        backgroundColor: window.chartColors.orange,
+        borderColor: window.chartColors.orange,
+        data: [
+                   0,20,0,0,0,0
+        ],
+              },
+              {
+        label: 'Total Deaths',
+        backgroundColor: window.chartColors.purple,
+        borderColor: window.chartColors.purple,
+        data: [
+                      0,0,0,0,0,0
+        ],
+        fill: false,
+              },
+              {
+        label: 'Total Recovered',
+        backgroundColor: window.chartColors.green,
+        borderColor: window.chartColors.green,
+        data: [
+                      0,0,0,0,0,0
+        ],
+        fill: false,
+              },{
+        label: 'New Confirmed',
+        fill: false,
+        backgroundColor: window.chartColors.blue,
+        borderColor: window.chartColors.blue,
+        data: [
+                   0,20,0,0,0,0
+        ],
+              },
+        {
+        label: 'Total Confirmed',
+        backgroundColor: window.chartColors.red,
+        borderColor: window.chartColors.red,
+        data: [
+                      0,0,0,0,0,0
+        ],
+        fill: false,
+              }
+          ]
+    },
+    options: {
+      responsive: true,
+      title: {
+        display: true,
+        text: 'Chart.js Line Chart'
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: true
+      },
+      scales: {
+        x: {
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Month'
+          }
+        },
+        y: {
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Value'
+          }
+        }
+      }
+    }
+  };
+
+
+  window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+		};
+
+//--
+    
+    
+</script>
+</body>
+</html>
