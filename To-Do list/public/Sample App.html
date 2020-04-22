@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+​
+	<!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> -->
+    <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+    <!------ Include the above in your HEAD tag ---------->
+	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+  <script src="https://kit.fontawesome.com/b516779e57.js" crossorigin="anonymous"></script>
+  <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous"> -->
+
+</head>
+<!--Coded with love by Mutiullah Samim-->
+<body>
+  
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+​
+<!-- TODO: Add SDKs for Firebase products that you want to use
+   https://firebase.google.com/docs/web/setup#available-libraries -->
+   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+   
+   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-storage.js"></script>
+<script>
+    
+    
+// Your web app's Firebase configuration
+var firebaseConfig = {
+    apiKey: "AIzaSyABJPz_Z3fCGhXXKybEb_aStm-ICqJlLaM",
+    authDomain: "to-do-list-e5953.firebaseapp.com",
+    databaseURL: "https://to-do-list-e5953.firebaseio.com",
+    projectId: "to-do-list-e5953",
+    storageBucket: "to-do-list-e5953.appspot.com",
+    messagingSenderId: "661713439170",
+    appId: "1:661713439170:web:0d37b8a61df2c720392e5b",
+    measurementId: "G-KMXXD2MFSY"
+  };
+  
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  
+ //---------------------- 
+ var db = firebase.firestore();
+
+  db.collection("todo").add({
+    item: "Eat Lunch",
+    isComplete: false,
+    createdOn: Date.now()
+})
+.then(function(docRef) {
+    document.write(docRef.id);
+    console.log("Document written with ID: ", docRef.id);
+})
+.catch(function(error) {
+    console.error("Error adding document: ", error);
+});
+//  //----------------------
+//  db.collection("users").get().then((querySnapshot) => {
+//     querySnapshot.forEach((doc) => {
+//         console.log(`${doc.id} => ${doc.data()}`);
+//     });
+// });
+//-----------------------------------
+//  var citiesRef = db.collection("cities");
+
+// citiesRef.doc("SF").set({
+//     name: "San Francisco", state: "CA", country: "USA",
+//     capital: false, population: 860000,
+//     regions: ["west_coast", "norcal"] });
+// citiesRef.doc("LA").set({
+//     name: "Los Angeles", state: "CA", country: "USA",
+//     capital: false, population: 3900000,
+//     regions: ["west_coast", "socal"] });
+// citiesRef.doc("DC").set({
+//     name: "Washington, D.C.", state: null, country: "USA",
+//     capital: true, population: 680000,
+//     regions: ["east_coast"] });
+// citiesRef.doc("TOK").set({
+//     name: "Tokyo", state: null, country: "Japan",
+//     capital: true, population: 9000000,
+//     regions: ["kanto", "honshu"] });
+// citiesRef.doc("BJ").set({
+//     name: "Beijing", state: null, country: "China",
+//     capital: true, population: 21500000,
+//     regions: ["jingjinji", "hebei"] });
+  
+</script>
+  <!-- <script src="index.js"></script> -->
+</body>
+</html>

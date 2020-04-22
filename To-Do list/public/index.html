@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<link rel="stylesheet" href="ToDo listed.css">
+    <title>Welcome to Firebase Hosting</title>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+     <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>     
+      <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyABJPz_Z3fCGhXXKybEb_aStm-ICqJlLaM",
+    authDomain: "to-do-list-e5953.firebaseapp.com",
+    databaseURL: "https://to-do-list-e5953.firebaseio.com",
+    projectId: "to-do-list-e5953",
+    storageBucket: "to-do-list-e5953.appspot.com",
+    messagingSenderId: "661713439170",
+    appId: "1:661713439170:web:0d37b8a61df2c720392e5b",
+    measurementId: "G-KMXXD2MFSY"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  var objUser;
+</script>
+
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+  </head>
+  <body onload="FromGmail()">
+    
+    <div id="containerLogin">
+      <h2>Welcome</h2>
+      <h1>To-Do List</h1>
+      <button id="btnGmail" onclick="goToGmail()">G-Mail</button>
+    </div>
+    <div id="containe
+    " style="display: none;">
+      
+          <div class="container">
+            <div class="alert alert-primary" role="alert" id="alertBox" style="display: none;">
+              This is a primary alert—check it out!
+            </div>
+  <input type="text" id="txtInput" placeholder="Enter some task..." onkeyup="FindEnter()">
+  <button id="btnAddToDo" onclick="AddToTasks()">Add To Do</button>
+  <br>
+  <br>
+  <ul id="lstTasks" onclick="FinishTask()">
+    </ul>
+          </div>
+      <button id="btnSignout" onclick="signOut()">G-MailSignOut</button>
+    </div>
+    <script>
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    var user = firebase.auth().currentUser;
+    if(user != null)
+    {
+       objUser=user;
+      document.getElementById("containerLogin").style.display="none";
+       document.getElementById("containerTodo").style.display="block";
+      getList();
+    }
+  } else 
+  {
+    document.getElementById("containerLogin").style.display="block";
+     document.getElementById("containerTodo").style.display="none";
+  }
+});
+//------------------
+
+    function goToGmail()
+    {
+      firebase.auth().signInWithRedirect(provider);
+    }
+    
+    function FromGmail()
+    {
+      firebase.auth().getRedirectResult().then(function(result) {
+        if (result.credential) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          var token = result.credential.accessToken;
+          
+          console.log("TOKEN   :  " + token);
+        }
+        // The signed-in user info.
+         objUser = result.user;
+        console.log("EMAIL  :  " + objUser.email);
+       document.getElementById("containerLogin").style.display="none";
+       document.getElementById("containerTodo").style.display="block";
+      //  getList();
+
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+      });
+    }
+    function signOut()
+    {
+              firebase.auth().signOut().then(function() {
+          // Sign-out successful.
+          console.log("Logout Success");
+          document.getElementById("containerLogin").style.display="block";
+         document.getElementById("containerTodo").style.display="none";  
+        }).catch(function(error) {
+          // An error happened.
+        });
+    }
+
+  </script>
+   <script>
+    //--To get the list as tasks-----mariya
+    var ulTasks = document.getElementById("lstTasks");
+ //--To get the list by clicking Enter-----mariya
+    function FindEnter()
+  {//alert(event.keyCode);
+  if(event.keyCode === 13)
+  {
+    document.getElementById("btnAddToDo").click();
+  }
+  }
+//--To connect firebase with firestore declare an variable-----mariya
+  var db = firebase.firestore();
+  function AddToTasks()
+  {  
+//---------------------
+//--To add a new date-----mariya
+var d = new Date();
+//--To add the list as key, Value, key & Value with required data-----mariya
+db.collection("todo").doc(objUser.email).collection("todo_items").add({
+  item: document.getElementById("txtInput").value,
+  isComplete: false,
+  createdOn: d.toLocaleString("en-GB")
+
+})
+.then(function(docRef) {
+//-- clearing Task text box-----mariya
+var click = 'DelClick(this,"'+ docRef.id +'")';
+//--To get the delete img in a click----mariya
+    var litask = "<li>" + document.getElementById("txtInput").value + " <img src='delete.png' width='20' height='20' onClick='"+ click + "'></li>";
+    ulTasks.innerHTML = ulTasks.innerHTML + litask;
+document.getElementById("txtInput").value = "";
+    document.getElementById("btnAddToDo").innerHTML = "Add Item";
+    document.getElementById("alertBox").style.display = "block";
+    setTimeout("killAlertBox()",3000);
+  
+})
+//--To throw an alert if any error----mariya
+.catch(function(error) {
+  console.error("Error adding document: ", error);
+}); 
+  }
+
+//--To get the list as key, Value, key & Value with required data-----mariya
+function getList(){
+ulTasks.innerHTML = "";
+db.collection("todo").doc(objUser.email).collection("todo_items").get().then((querySnapshot) => 
+{
+  querySnapshot.forEach((doc) => 
+  {   
+      console.log(doc.id);
+      var click = 'DelClick(this,"'+ doc.id +'")';
+      var finishClick = 'FinishTask(this,"'+ doc.id +'")';
+      if (doc.data().isComplete == true)
+      {
+        var litask = "<li onClick='"+ finishClick + "' class='checked'>" + doc.data().item + " <img src='delete.png' width='20' height='20' onClick='"+ click + "'></li>";
+      } else
+      {
+        var litask = "<li onClick='"+ finishClick + "' class=''>" + doc.data().item + " <img src='delete.png' width='20' height='20' onClick='"+ click + "'></li>";
+      }
+      ulTasks.innerHTML = ulTasks.innerHTML + litask;
+  });
+});
+
+}
+
+  function killAlertBox()
+  {
+    document.getElementById("alertBox").style.display = "none";
+  }
+
+//--To the delete item in firebase ----mariya
+  function DelClick(obj,itemID)
+  {
+    db.collection("todo").doc(objUser.email).collection("todo_items").doc(itemID).delete().then(function() {
+      console.log("Document successfully deleted!");
+      obj.parentElement.style.display="none";
+}).catch(function(error) {
+  console.error("Error removing document: ", error);
+});
+    
+  }
+
+//--To strike the list once it's done/ clicked----mariya
+  function FinishTask(obj,itemID)
+{ 
+
+if(obj.classList=="checked")
+{
+  db.collection("todo").doc(objUser.email).collection("todo_items").doc(itemID).update(
+  {
+    isComplete: false
+  }
+).then(function() {
+      console.log("FALSE -- Document successfully Updated!");
+      obj.classList="";
+}).catch(function(error) {
+  console.error("Error removing document: ", error);
+});
+} else
+{
+  db.collection("todo").doc(objUser.email).collection("todo_items").doc(itemID).update(
+  {
+    isComplete: true
+  }
+).then(function() {
+      console.log("TRUE -- Document successfully Updated!");
+      obj.classList.toggle('checked');
+}).catch(function(error) {
+  console.error("Error removing document: ", error);
+});
+}
+
+}
+</script>
+   
+    
+  </body>
+</html>

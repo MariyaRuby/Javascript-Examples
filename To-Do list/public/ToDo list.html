@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<link rel="stylesheet" href="ToDo listed.css">
+<meta charset="UTF-8">
+<title>mariyarubi website</title>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-storage.js"></script>
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyABJPz_Z3fCGhXXKybEb_aStm-ICqJlLaM",
+        authDomain: "to-do-list-e5953.firebaseapp.com",
+        databaseURL: "https://to-do-list-e5953.firebaseio.com",
+        projectId: "to-do-list-e5953",
+        storageBucket: "to-do-list-e5953.appspot.com",
+        messagingSenderId: "661713439170",
+        appId: "1:661713439170:web:0d37b8a61df2c720392e5b",
+        measurementId: "G-KMXXD2MFSY"
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+      
+     //---------------------- 
+</script>
+</head>
+   <body> 
+    <input type="text" id="txtUserId">
+    <input type="button" id="btnLogin" value="SignIn" onclick="getList()">
+        <div class="container">
+          <div class="alert alert-primary" role="alert" id="alertBox" style="display: none;">
+            This is a primary alert—check it out!
+          </div>
+<input type="text" id="txtInput" placeholder="Enter some task..." onkeyup="FindEnter()">
+<button id="btnAddToDo" onclick="AddToTasks()">Add To Do</button>
+<br>
+<br>
+<ul id="lstTasks" onclick="FinishTask()">
+ 
+</ul>
+        </div>
+    <script>
+      //--To get the list as tasks-----mariya
+      var ulTasks = document.getElementById("lstTasks");
+   //--To get the list by clicking Enter-----mariya
+      function FindEnter()
+    {//alert(event.keyCode);
+    if(event.keyCode === 13)
+    {
+      document.getElementById("btnAddToDo").click();
+    }
+    }
+//--To connect firebase with firestore declare an variable-----mariya
+    var db = firebase.firestore();
+    function AddToTasks()
+    {  
+//---------------------
+//--To add a new date-----mariya
+var d = new Date();
+//--To add the list as key, Value, key & Value with required data-----mariya
+  db.collection("todo").doc(document.getElementById("txtUserId").value).collection("todo_items").add({
+    item: document.getElementById("txtInput").value,
+    isComplete: false,
+    createdOn: d.toLocaleString("en-GB")
+
+})
+.then(function(docRef) {
+  //-- clearing Task text box-----mariya
+  var click = 'DelClick(this,"'+ docRef.id +'")';
+  //--To get the delete img in a click----mariya
+      var litask = "<li>" + document.getElementById("txtInput").value + " <img src='delete.png' width='20' height='20' onClick='"+ click + "'></li>";
+      ulTasks.innerHTML = ulTasks.innerHTML + litask;
+  document.getElementById("txtInput").value = "";
+      document.getElementById("btnAddToDo").innerHTML = "Add Item";
+      document.getElementById("alertBox").style.display = "block";
+      setTimeout("killAlertBox()",3000);
+    
+})
+ //--To throw an alert if any error----mariya
+.catch(function(error) {
+    console.error("Error adding document: ", error);
+}); 
+    }
+
+//--To get the list as key, Value, key & Value with required data-----mariya
+function getList(){
+  ulTasks.innerHTML = "";
+  db.collection("todo").doc(document.getElementById("txtUserId").value).collection("todo_items").get().then((querySnapshot) => 
+  {
+    querySnapshot.forEach((doc) => 
+    {   
+        console.log(doc.id);
+        var click = 'DelClick(this,"'+ doc.id +'")';
+        var litask = "<li>" + doc.data().item + " <img src='delete.png' width='20' height='20' onClick='"+ click + "'></li>";
+        ulTasks.innerHTML = ulTasks.innerHTML + litask;
+    });
+});
+
+}
+
+    function killAlertBox()
+    {
+      document.getElementById("alertBox").style.display = "none";
+    }
+    var ctx = c.getContext("2d");
+ctx.fillStyle = "#FF0000";
+ctx.fillRect(0, 0, 80, 100);
+
+//--To the delete item in firebase ----mariya
+    function DelClick(obj,itemID)
+    {
+      db.collection("todo").doc(document.getElementById("txtUserId").value).collection("todo_items").doc(itemID).delete().then(function() {
+        console.log("Document successfully deleted!");
+        obj.parentElement.style.display="none";
+}).catch(function(error) {
+    console.error("Error removing document: ", error);
+});
+      
+    }
+
+//--To strike the list once it's done/ clicked----mariya
+    function FinishTask()
+{ //alert("event.keyCode");
+  if (event.target.tagName === 'LI')
+  {
+    event.target.classList.toggle('checked');
+  }
+}
+// var db = firebase.firestore();
+
+//   db.collection("todo").add({
+//     item: "Eat Lunch",
+//     isComplete: false,
+//     createdOn: Date.now()
+// })
+// .then(function(docRef) {
+//     document.write(docRef.id);
+//     console.log("Document written with ID: ", docRef.id);
+// })
+// .catch(function(error) {
+//     console.error("Error adding document: ", error);
+// });
+          </script>
+        
+   </body>
+</html>
