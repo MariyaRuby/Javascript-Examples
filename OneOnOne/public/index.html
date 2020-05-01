@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html><html class=''>
 <head>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -7,14 +5,20 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'><link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
 <link rel='stylesheet' href="index.css">
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+<style>
 
+</style>
+<script src="marya.js"></script>
+
+<!-- The core Firebase JS SDK is always required and must be listed first - mariya -->
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-messaging.js"></script>     
 <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>     
 <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-storage.js"></script>
 <script>
-	// Your web app's Firebase configuration
+	// Your web app's Firebase configuration - mariya
 	var firebaseConfig = {
 	  apiKey: "AIzaSyCTCpgRwfPSvKsA2J130ilpuWLkS57Vckc",
 	  authDomain: "one-on-one-9f870.firebaseapp.com",
@@ -25,14 +29,25 @@
 	  appId: "1:49245167143:web:6f2c9e7e5a9db3e4527802",
 	  measurementId: "G-1XQLMKPDNP"
 	};
-	// Initialize Firebase
+	// Initialize Firebase - mariya
 	firebase.initializeApp(firebaseConfig);
+	const messaging = firebase.messaging();
 	firebase.analytics();
+	  // Create a root storage reference - mariya
+	var storageRef = firebase.storage().ref();
+	// for FCM Token - mariya
+	var gcmToken = "";
+    // Initialize the Firebase app by passing in the messagingSenderId - mariya
+var config = {
+  messagingSenderId: "49245167143"
+};
 </script>
+
+<script src="script1.js"></script>
+
 </head>
 <body onload="FromGmail()">
-	
-  
+<!-- create a div Container to Login in G-mail using a button - mariya -->
   <div id="containerLogin" >
 	<h2>Welcome to </h2>
 	<h1>OneOnOne</h1>
@@ -44,6 +59,7 @@
 <div id="frame">
 	<div id="sidepanel">
 		<div id="profile">
+	<!-- div to show the profile image and Name of the user - mariya		 -->
 			<div class="wrap">
 				<img id="imgProfile" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
 				<p id="spnDispName">xxxxxxx</p>
@@ -55,251 +71,39 @@
 			</ul>
 		</div>
 	</div>
+	<!-- div to show the content box - mariya-->	
 	<div class="content" style=" display: block;">
 		<div class="contact-profile">
 			<img id="imgChtrProfile" src="" alt="" />
 			<p id="spnChtrName"></p>
 
 			</div>
-			<div class="messages">
+			<div class="messages" id="divChatM">
 				<ul id="ulMsgs">
 				</ul>
 				</div>
+		<!-- div for input type text box for messaging with a send button - mariya-->
 				<div class="message-input">
 					<div class="wrap">
-					<input type="text" placeholder="Write your message..." />
-					<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-					<button class="submit" id="btnSend" onclick="newMessage()"><i class="fa fa-paper-plane" ></i></button>
+					<input type="text" placeholder="Write your message..."/>
+					<input type = "file" id="filProfile" style="height: 0; overflow: hidden; width: 0; opacity: 0;" />
+					<!-- <button id="btnUpload" onclick="upload()">Upload</button> -->
+					<label class="fa fa-paperclip attachment" for="filProfile"></label>
+					<button class="submit" id="btnSend" onclick="BeforeSendingNewMessage()"><i class="fa fa-paper-plane" ></i></button>
 				</div>
 				</div>
 			</div>			
 			</div>
+			<!-- To signout from G-mail-----mariya	 -->
 		<button id="btnSignout" onclick="signOut()">G-MailSignOut</button>	
 	</div>
-	
+
+	<script src="script2.js"></script>
+	<script src="script3.js"></script>
 <script>
-	//--To connect firebase with firestore declare an variable-----mariya
-	var db = firebase.firestore();
-	//--To get the list as key, Value, key & Value with required data-----mariya
-
-var strUserId="";
-function getList()
-{
-	var docRef = db.collection("Chat").doc(objUser.email);
-docRef.get().then(function(doc) {
-    if (doc.exists) {
-		strUserId=doc.id;
-		document.getElementById("imgProfile").src=doc.data().ProfileImg;
-		document.getElementById("spnDispName").innerHTML=doc.data().DisplayName;
-	} else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-    }
-}).catch(function(error) {
-    console.log("Error getting document:", error);
-});
-//-------------------------------------------------
-// var arrUserId = [];
-// var string=strUserId;
-// alert(strUserId("user1").charAt(0)); 
-// alert(arrUserId = strUserId("user1").charAt(0).sort());
-var docs = db.collection("Chat");
-docs.get().then(function(doc) {
-	doc.forEach((d) => 
-  {
-	if(d.id != strUserId)
+	function FileChooser()
 	{
-		var strLiTag = '<li id="lstUser" class="contact" onclick="chooseUser(this)" ><div class="wrap"><span class="contact-status online"></span><img src="'+ d.data().ProfileImg +'" alt="" /><div class="meta"><p id="spnCntName" class="name">'+ d.data().DisplayName +'</p><input type="hidden" id="hid" value="'+ d.id +'"></div></div></li>';
-	  	document.getElementById("ulContacts").innerHTML=document.getElementById("ulContacts").innerHTML+strLiTag;
-	}  
-  });
-
-}).catch(function(error) {
-    console.log("Error getting document:", error);
-});	
-}
-var hidEmail="";
-var roomId="";
-function chooseUser(objLi)
-{
-	var x = document.getElementsByClassName("contact");
-	var i;
-	for (i = 0; i < x.length; i++) {
- 	 x[i].classList.remove("active");
-}
-		// document.getElementsById("contact").classList.remove("active");
-	objLi.classList.add("active");
-	document.getElementById("imgChtrProfile").src=objLi.childNodes[0].childNodes[1].src;
-	document.getElementById("spnChtrName").innerHTML=objLi.childNodes[0].childNodes[2].childNodes[0].innerHTML;
-	hidEmail=objLi.childNodes[0].childNodes[2].childNodes[1].value;
-
-	//---- sort strUserId and hidEmail ....
-	var arrUsers = [];
-	
-	arrUsers.push(strUserId.toLowerCase());
-	arrUsers.push(hidEmail.toLowerCase());
-	arrUsers.sort();
-	var docs = db.collection("rooms").where("user1", "==", arrUsers[0]).where("user2", "==", arrUsers[1]);	
-	docs.get().then(function(doc) 
-	{
-		
-    if (doc.empty == true)
-    {
-        db.collection("rooms").add({
-			user1: arrUsers[0],
-			user2: arrUsers[1],
-				})
-				.then(function(docRef) {
-					roomId = docRef.id;
-				})
-				.catch(function(error) {
-					console.error("Error adding document: ", error);
-				});
-    }
-    else {
-				doc.forEach((d) => 
-				{ 
-					
-					roomId=d.id;
-					db.collection("rooms").doc(d.id).collection("msgs").get().then(function(msgs)
-					{
-						var strLi ="";
-						document.getElementById("ulMsgs").innerHTML = "";
-						msgs.forEach((m)=>
-						{ 
-						if(m.data().msg_from===strUserId)
-							{
-							strLi = '<li class="sent"><img src="' + document.getElementById("imgProfile").src + '" alt="" /><p>' + m.data().msg + '</p></li>';	
-						}
-						else
-							{	
-							strLi = '<li class="replies"><img src="' + document.getElementById("imgChtrProfile").src + '" alt="" /><p>' + m.data().msg + '</p></li>';
-							}
-						document.getElementById("ulMsgs").innerHTML = document.getElementById("ulMsgs").innerHTML + strLi;
-						}		
-						)
-					}).catch(function(error) {
-						console.log("Error getting document:", error);
-					});	
-				}).catch(function(error) {
-			console.log("Error getting document:", error);
-		});	        
-    	}
-	});
-}
-</script>
-<script>
-    var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    var user = firebase.auth().currentUser;
-    if(user != null)
-    {
-       objUser=user;
-      document.getElementById("containerLogin").style.display="none";
-       document.getElementById("containerOneOnOne").style.display="block";
-      getList();
-    }
-  } else 
-  {
-    document.getElementById("containerLogin").style.display="block";
-     document.getElementById("containerOneOnOne").style.display="none";
-  }
-});
-//------------------
-    function goToGmail()
-    {
-      firebase.auth().signInWithRedirect(provider);
-    }
-    
-    function FromGmail()
-    {
-      firebase.auth().getRedirectResult().then(function(result) {
-        if (result.credential) {
-          // This gives you a Google Access Token. You can use it to access the Google API.
-          var token = result.credential.accessToken;
-          
-          console.log("TOKEN   :  " + token);
-        }
-        // The signed-in user info.
-         objUser = result.user;
-		console.log("EMAIL  :  " + objUser.email);
-		db.collection("Chat").doc(objUser.email).set({
-			DisplayName: objUser.displayName,
-			IsOnline: false,
-			ProfileImg: objUser.photoURL
-			}).then(function(objUsers){
-				alert(objUsers.id);
-			});
-       document.getElementById("containerLogin").style.display="none";
-	   document.getElementById("containerOneOnOne").style.display="block";
-      //  getList();
-
-      }).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        // ...
-      });
-    }
-    function signOut()
-    {
-              firebase.auth().signOut().then(function() {
-          // Sign-out successful.
-          console.log("Logout Success");
-          document.getElementById("containerLogin").style.display="block";
-         document.getElementById("containerOneOnOne").style.display="none";  
-        }).catch(function(error) {
-          // An error happened.
-        });
-    }
-
-  </script>
-<script >
-function newMessage() {
-		message = $(".message-input input").val();
-		
-		if($.trim(message) == '') {
-			return false;
-		}
-		// var profileClick = "' + document.getElementById("ImgProfile").src + '"
-		$('<li class="sent"><img src=' + document.getElementById("imgProfile").src + ' alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-		$('.message-input input').val(null);
-		$('.contact.active .preview').html('<span>You: </span>' + message);
-		$(".messages").animate({ scrollTop: $(document).height() }, "fast");
-
-		db.collection("rooms").doc(roomId).collection("msgs").add({
-  msg: message,
-  msg_from: strUserId,
-  msg_on: new Date().toLocaleString("en-GB"),
-  msg_to: hidEmail
-})
-.then(function(docRef) {
-	//
-})
-//--To throw an alert if any error----mariya
-.catch(function(error) {
-  console.error("Error adding document: ", error);
-}); 
-
-	};
-
-	//////////////////////////////////
-	// $("btnSend").click(function() {
-	// 	alert("btnSend");
-	//   newMessage();
-	// });
-	
-
-	$(window).on('keydown', function(e) {
-	  if (e.which == 13) {
-		newMessage();
-		return false;
-	  }
-	});
+		alert("mariya");
+	}
 </script>
 </body></html>

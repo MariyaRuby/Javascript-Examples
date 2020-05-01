@@ -1,0 +1,164 @@
+<!DOCTYPE html><html class=''>
+<head>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'><link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<link rel='stylesheet' href="index.css">
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-messaging.js"></script>     
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+<script>
+	// Your web app's Firebase configuration
+	var firebaseConfig = {
+	  apiKey: "AIzaSyCTCpgRwfPSvKsA2J130ilpuWLkS57Vckc",
+	  authDomain: "one-on-one-9f870.firebaseapp.com",
+	  databaseURL: "https://one-on-one-9f870.firebaseio.com",
+	  projectId: "one-on-one-9f870",
+	  storageBucket: "one-on-one-9f870.appspot.com",
+	  messagingSenderId: "49245167143",
+	  appId: "1:49245167143:web:6f2c9e7e5a9db3e4527802",
+	  measurementId: "G-1XQLMKPDNP"
+	};
+	// Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+	firebase.analytics();
+</script>
+<script>
+  var gcmToken = "";
+    // Initialize the Firebase app by passing in the messagingSenderId
+var config = {
+  messagingSenderId: "49245167143"
+};
+
+// Request for permission
+messaging.requestPermission()
+.then(function() {
+  console.log('Notification permission granted.');
+  // TODO(developer): Retrieve an Instance ID token for use with FCM.
+  messaging.getToken()
+  .then(function(currentToken) {
+    if (currentToken) {
+      console.log('Token: ' + currentToken);
+      gcmToken = currentToken;
+      sendTokenToServer(currentToken);
+    } else {
+      console.log('No Instance ID token available. Request permission to generate one.');
+      setTokenSentToServer(false);
+    }
+  })
+  .catch(function(err) {
+    console.log('An error occurred while retrieving token. ', err);
+    setTokenSentToServer(false);
+  });
+})
+.catch(function(err) {
+  console.log('Unable to get permission to notify.', err);
+});
+
+// Handle incoming messages
+messaging.onMessage(function(payload) {
+  console.log("Rakesh Notification received: ", payload.data);
+  toastr["info"](payload.data.body, payload.data.title);
+});
+
+// Callback fired if Instance ID token is updated.
+messaging.onTokenRefresh(function() {
+  messaging.getToken()
+  .then(function(refreshedToken) {
+    console.log('Token refreshed.');
+    // Indicate that the new Instance ID token has not yet been sent 
+    // to the app server.
+    setTokenSentToServer(false);
+    // Send Instance ID token to app server.
+    sendTokenToServer(refreshedToken);
+  })
+  .catch(function(err) {
+    console.log('Unable to retrieve refreshed token ', err);
+  });
+});
+
+// Send the Instance ID token your application server, so that it can:
+// - send messages back to this app
+// - subscribe/unsubscribe the token from topics
+function sendTokenToServer(currentToken) {
+  if (!isTokenSentToServer()) {
+    console.log('Sending token to server...');
+    // TODO(developer): Send the current token to your server.
+    setTokenSentToServer(true);
+  } else {
+    console.log('Token already sent to server so won\'t send it again ' +
+        'unless it changes');
+  }
+}
+
+function isTokenSentToServer() {
+  return window.localStorage.getItem('sentToServer') == 1;
+}
+
+function setTokenSentToServer(sent) {
+  window.localStorage.setItem('sentToServer', sent ? 1 : 0);
+}
+
+function fcmSend()
+{
+    // POST request using fetch() 
+fetch("https://fcm.googleapis.com/fcm/send", { 
+      
+      // Adding method type 
+      method: "POST", 
+        
+      // Adding body or contents to send 
+      body: JSON.stringify(
+      {
+  "priority":"HIGH",
+  "data":{
+      "title": "One-on-One",
+      "body": "Rakesh sent this from One-on-One thru Javascript FETCH method"
+  },
+  "to": gcmToken
+      }        
+      ), 
+        
+      // Adding headers to the request 
+      headers: { 
+        "Content-type": "application/json",
+        "Authorization": "key=AAAAC3c9nic:APA91bHefJm8r52TvDzfa-GppbisBNm5JRGOb8DcQL6l9e8b10uXx16Scxdl7tkQUHq06ESZFMTekRsD34NXL5nZHWA-GJcUkdb2lHZceQRZ1VJFTnBt_Jc8txLYyKyWCeufAOSnahcD"
+      } 
+  }) 
+
+  .then(function(response){
+      var objJson = response.json();
+      console.log(objJson);
+  });
+
+  // // Converting to JSON 
+  // .then(response => response.json())     
+  // // Displaying results to console 
+  // .then(json => console.log(json)); 
+}
+</script>
+
+</head>
+<body>
+
+    <button id="btnSend" onclick="fcmSend()">SEND</button>  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
